@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func oldReverse() {
 	// Исходная строка
 	str := []rune("snow dog sun")
 
@@ -42,4 +42,34 @@ func main() {
 
 	// Выводим результат
 	fmt.Println(string(str))
+}
+
+func reverseWordOrder(s string) string {
+	runes := []rune(s)
+
+	n := len(runes)
+
+	reverse(runes, 0, n-1)
+
+	start := 0
+	for i := 0; i <= n; i++ {
+		if i == n || runes[i] == ' ' {
+			reverse(runes, start, i-1)
+			start = i + 1
+		}
+	}
+
+	return string(runes)
+}
+
+func reverse(runes []rune, l, r int) {
+	for l < r {
+		runes[l], runes[r] = runes[r], runes[l]
+		l++
+		r--
+	}
+}
+
+func main() {
+	fmt.Println(reverseWordOrder("snow dog sun"))
 }

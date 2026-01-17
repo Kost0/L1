@@ -8,21 +8,7 @@ import (
 )
 
 // Функция запускающая воркеров
-func startWorkers(workers int) {
-	// Канал для записи int
-	ch := make(chan int)
-
-	// Горутина для записи данных в канал
-	go func() {
-		// Бесконечный цикл для постоянной записи
-		for {
-			// Записываем случайное число в канал
-			ch <- rand.Intn(1000)
-			// Для удобства чтения результата делаем небольшую задержку
-			time.Sleep(500 * time.Millisecond)
-		}
-	}()
-
+func startWorkers(workers int, ch chan int) {
 	// WaitGroup для работы с горутинами
 	wg := sync.WaitGroup{}
 
@@ -47,8 +33,19 @@ func startWorkers(workers int) {
 }
 
 func main() {
+	// Канал для записи int
+	ch := make(chan int)
+
 	// Определяем количество воркеров
 	workers := 10
 	// Запускаем воркеры
-	startWorkers(workers)
+	go startWorkers(workers, ch)
+
+	// Бесконечный цикл для постоянной записи
+	for {
+		// Записываем случайное число в канал
+		ch <- rand.Intn(1000)
+		// Для удобства чтения результата делаем небольшую задержку
+		time.Sleep(500 * time.Millisecond)
+	}
 }
